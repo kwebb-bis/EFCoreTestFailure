@@ -98,5 +98,130 @@ namespace EFCoreTestFailure
             _context.SaveChanges();
             Assert.AreEqual(1, _context.Tasks.Count());
         }
+        
+        // Creating the context per test rather than during initialize
+        // These tests still fail
+
+        [TestMethod]
+        public void TestMethod5()
+        {
+            var options = new DbContextOptionsBuilder<TaskManagerContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            TaskManagerContext context = new TaskManagerContext(options);
+            context.Statuses.AddRange(Status.GetAll());
+            context.SaveChanges();
+
+            Task[] tasks = new Task[]
+            {
+                new Task()
+                {
+                    EndDate = DateTime.Now,
+                    Status = Status.Complete
+                },
+                new Task()
+                {
+                    EndDate = DateTime.Now,
+                    Status = Status.New
+                },
+                new Task()
+                {
+                    EndDate = DateTime.Now,
+                    Status = Status.Cancelled
+                },
+                new Task()
+                {
+                    EndDate = null,
+                    Status = Status.InProgress
+                }
+            };
+            context.Tasks.AddRange(tasks);
+            context.SaveChanges();
+            Assert.AreEqual(4, context.Tasks.Count());
+        }
+
+        [TestMethod]
+        public void TestMethod6()
+        {
+            var options = new DbContextOptionsBuilder<TaskManagerContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            TaskManagerContext context = new TaskManagerContext(options);
+            context.Statuses.AddRange(Status.GetAll());
+            context.SaveChanges();
+
+            Task[] tasks = new Task[]
+            {
+                new Task()
+                {
+                    EndDate = DateTime.Now,
+                    Status = Status.Complete
+                },
+                new Task()
+                {
+                    EndDate = DateTime.Now,
+                    Status = Status.New
+                },
+                new Task()
+                {
+                    EndDate = DateTime.Now,
+                    Status = Status.Cancelled
+                }
+            };
+            context.Tasks.AddRange(tasks);
+            context.SaveChanges();
+            Assert.AreEqual(3, context.Tasks.Count());
+        }
+
+        [TestMethod]
+        public void TestMethod7()
+        {
+            var options = new DbContextOptionsBuilder<TaskManagerContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            TaskManagerContext context = new TaskManagerContext(options);
+            context.Statuses.AddRange(Status.GetAll());
+            context.SaveChanges();
+
+            Task[] tasks = new Task[]
+            {
+                new Task()
+                {
+                    EndDate = DateTime.Now,
+                    Status = Status.Complete
+                },
+                new Task()
+                {
+                    EndDate = DateTime.Now,
+                    Status = Status.New
+                },
+                new Task()
+                {
+                    EndDate = DateTime.Now,
+                    Status = Status.Cancelled
+                },
+                new Task()
+                {
+                    EndDate = null,
+                    Status = Status.InProgress
+                },
+                new Task()
+                {
+                    EndDate = null,
+                    Status = Status.InProgress
+                },
+                new Task()
+                {
+                    EndDate = null,
+                    Status = Status.InProgress
+                }
+            };
+            context.Tasks.AddRange(tasks);
+            context.SaveChanges();
+            Assert.AreEqual(6, context.Tasks.Count());
+        }
     }
 }
